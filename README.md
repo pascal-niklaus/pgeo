@@ -48,11 +48,8 @@ be provided.
 ## Installation
 
 * download the ready-built package from the [pkgs directory](https://github.com/pascal-niklaus/pgeo/tree/master/pkgs)
-
-* use `install_github`:
-
-`library(devtools)`
-
+* use `install_github`:  
+`library(devtools)`  
 `install_github("pascal-niklaus/pgeo/pgeo")`
 
 
