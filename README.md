@@ -8,7 +8,7 @@ related function which are in the package `pdiv`)
 
 ## Groups of functions 
 
-### interconversion of WGS-84 and Swiss Grid
+### Interconversion of WGS-84 and Swiss Grid
 
 These functions convert coordinates between WGS-84
 (latitude/longitude) and the Swiss Grid (X:northing/Y:easting).
@@ -23,7 +23,7 @@ the converted coordinates.
 - `CHtoWGSlat(N, E = NULL)`
 - `CHtoWGSlon(N, E = NULL)`
 
-### interconversion between MODIS (line,sample) to Swiss Grid
+### Interconversion of MODIS (line,sample) and Swiss Grid
 
 These functions converts MODIS line/sample coordinates (250, 500
 or 1000m pixel size) from tile H18V04 to Swiss Grid coordinates in
@@ -33,7 +33,7 @@ few meters.
 - `modisIJtoCH(I, J = NULL, grid = 250)`
 - `CHtomodisIJ(N, E = NULL, grid = 250)`
 
-### conversion from delta-permilles to atom-percent
+### Conversion from delta-permilles to atom-percent
 
 Often, one needs to convert delta-permil data from isotope-ratio
 mass spectrometry into atom-percent, i.e. the percentage (or
@@ -48,8 +48,11 @@ be provided.
 ## Installation
 
 * download the ready-built package from the [pkgs directory](https://github.com/pascal-niklaus/pgeo/tree/master/pkgs)
+
 * use `install_github`:
+
 `library(devtools)`
+
 `install_github("pascal-niklaus/pgeo/pgeo")`
 
 
