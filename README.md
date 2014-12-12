@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This R package contains functions related to broadly ``geographical'' topics,
+This R package contains functions related to broadly "geographical" topics,
 as opposed to general functions (which are in the package `pascal` and biodiversity-
 related function which are in the package `pdiv`)
 
