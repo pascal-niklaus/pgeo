@@ -1,4 +1,57 @@
-
+#' Convert MODIS (line,sample) to Swiss Grid coordinates and vice versa
+#'
+#' These functions converts MODIS line/sample coordinates (250, 500 or 1000m pixel size) from 
+#' tile H18V04 to Swiss Grid coordinates in meters and vice versa.
+#' The accuracy of the conversion is within a few meters. 
+#'
+#' These functions were developed by first converting modis line/sample coordinates to WGS-84 
+#' latitude and longitude using the MODIS tile mapper
+#' (\url{http://landweb.nascom.nasa.gov/cgi-bin/developer/tilemap.cgi}), then converting these to 
+#' Swiss Grid norting and easting using the approximate equations provided by SwissTopo 
+#' (\url{http://www.swisstopo.admin.ch/internet/swisstopo/en/home/products/software/products/skripts.html}), 
+#' and fitting a corresponding linear model (up to third order polynomial terms of I,J) until an 
+#' accuracy of a few meters was reached.  
+#' Note that the conversion from MODIS line/sample coordinates to Swiss Grid is fast, whereas 
+#' conversion in the opposite direction is very slow since it bases on an optimization procedure, 
+#' internally calling R's \code{optim} function.  
+#' 
+#' line/sample can be passed as separate arguments, or as a single argument combined into a data frame. 
+#' If the columns are not named \code{I} and \code{J}, the first is assumed to contain I and 
+#' the second to contain J.
+#'
+#' @param I MODIS tile line (O..4799), or a data frame containing tile line and sample in separate columns.
+#' @param J MODIS tile sample (0..4799), or NULL if the sample has been passed together with the line as a data frame.
+#' @param N Northing, in kilometers (Swiss Grid), or a data frame containing northing and easting as separate columns.
+#' @param E Easting, in kilometers (Swiss Grid), or NULL if the easting has been passed together with the 
+#'          northing as a data frame.
+#' @param grid Modis grid type, defaults to 250. Can also be 500 or 1000.
+#' @return  Returns a data frame with Swiss Grid northing and easting in columns designated N and E,
+#'          or a data frame with MODIS line and sample in columns designated I and J.   
+#' @examples
+#' require(pgeo);
+#'
+#' modisIJtoCH(1463,2437)
+#' ##        N      E
+#' ## 1 199995 600038
+#'
+#' # the following is very slow, use only for a few data points!
+#' CHtomodisIJ(199995, 600038)
+#' ##      I    J
+#' ## 1 1463 2437
+#'
+#' CHtoWGS(199995, 600038)
+#' ##      lat     lon
+#' ## 1 46.951 7.43914
+#'
+#' # Compare this to the tile mapper output for the forward mapping of this coordinate:
+#' # http://landweb.nascom.nasa.gov/cgi-bin/developer/tilemap.cgi
+#' # Map Projection/Grid: Sinusoidal
+#' # Pixel size: 0.25km
+#' # Mapping type: Tile/image coordinates 
+#' # Forward mapping (geographic coordinates in degrees): latitude, longitude
+#' # [sn q fwd tp] lat 46.951000  long 7.439140  =>  vert tile 4  horiz tile 18  line 1463.02  samp 2437.00
+#' @rdname modisCH
+#' @export
 modisIJtoCH <- function(I,J=NULL,grid=250) {
   if(length(dim(I))==2 && is.null(J)) {
     if(all(c("I","J") %in% names(I))) {
@@ -38,14 +91,14 @@ modisIJtoCH <- function(I,J=NULL,grid=250) {
     J<-J-1200;
     data.frame(
         N = ( 200000 + 580.299014353816
-          +I0 * -463.150029821094
-          +J0 * -0.659952850893845
-          +I0^2 * 0.000336272263047911
-          +J0^2 * 0.0180913677275943
-          +I0^3 * -4.35231222686723e-07
-          +I0 * J0 * -0.00338475381066359
-          +I0^2 * J0 * 4.36035907632673e-07
-          +I0 * J0^2 * -1.40316143017419e-06 ),
+          +I * -463.150029821094
+          +J * -0.659952850893845
+          +I^2 * 0.000336272263047911
+          +J^2 * 0.0180913677275943
+          +I^3 * -4.35231222686723e-07
+          +I * J * -0.00338475381066359
+          +I^2 * J * 4.36035907632673e-07
+          +I * J^2 * -1.40316143017419e-06 ),
         E = ( 600000 -8386.72290726289
             +I * -44.096768394133
             +J * 464.666339994653
@@ -60,6 +113,8 @@ modisIJtoCH <- function(I,J=NULL,grid=250) {
   }
 }
   
+#' @rdname modisCH
+#' @export
 CHtomodisIJ <- function(N,E=NULL,grid=250) {
   RSS <- function(x) {      
     sum((modisIJtoCH(x[1],x[2],grid=grid)-c(N0,E0))^2);

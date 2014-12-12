@@ -1,3 +1,45 @@
+#' Conversion between Swiss Grid and WGS-84
+#'
+#' These functions convert coordinates between WGS-84 (latitude/longitude) and the Swiss Grid (X:northing/Y:easting). 
+#' The conversion is approximate with an accuracy of a few meters, based on equations provided by SwissTopo.
+#' These functions return the converted coordinates. 
+#'
+#' All variants of CHtoWGS and WGStoCH optionally take a data frame with two columns as first argument, 
+#' and will return the respective result in a data frame with two columns. The content of the data frame
+#' is interpreted according to the column names (\code{N} and \code{E} or \code{lat} and \code{long}) or,
+#' if other names are used, according to the default argument order.
+#'
+#' @param lat Latitude, in degrees, or a data frame containing latitude and longitude as separate columns.
+#' @param lon Longitude, in degrees, or NULL if the longitude has been passed as together with the 
+#'            latitude as a data frame.
+#' @param N Northing, in kilometers (Swiss Grid), or a data frame containing northing and 
+#'          easting as separate columns.
+#' @param E Easting, in kilometers (Swiss Grid), or NULL of the easting has been passed together 
+#'          with the northing as a data frame.
+#' @return Returns WGS-84 latitude or longitude, or Swiss Grid norting or easting. 
+#'        If both coordinates are returned, they are stored in a data frame with the respective column names.
+#' @examples
+#' 
+#' library(pgeo);
+#'
+#' WGStoCH(lat=47,lon=7);
+#' ##        N      E
+#' ## 1 205532 566639
+#'
+#' CHtoWGS(N=205532,E=566639)
+#' ##   lat lon
+#' ## 1  47   7
+#'
+#' WGStoCH(data.frame(lat=c(47,47.2),lon=7))
+#' ##        N      E
+#' ## 1 205532 566639
+#' ## 2 227766 566764
+#'
+#' WGStoCHN(data.frame(lat=c(47,47.2),lon=7))
+#' ## [1] 205532 227766
+#' @author Pascal Niklaus \email{pascal.niklaus@@ieu.uzh.ch}  
+#' @rdname WGSCH
+#' @export
 WGStoCH <- function(lat,lon=NULL) 
 {
   if(length(dim(lat))==2) {
@@ -13,6 +55,8 @@ WGStoCH <- function(lat,lon=NULL)
   data.frame(N=WGStoCHN(lat,lon),E=WGStoCHE(lat,lon));
 }
 
+#' @rdname WGSCH
+#' @export
 CHtoWGS <- function(N,E=NULL) 
 {
   if(length(dim(N))==2) {
@@ -28,6 +72,8 @@ CHtoWGS <- function(N,E=NULL)
   data.frame(lat=CHtoWGSlat(N,E),lon=CHtoWGSlon(N,E));
 }
 
+#' @rdname WGSCH
+#' @export
 WGStoCHE <- function(lat, lon=NULL)
 {
   if(length(dim(lat))==2) {
@@ -49,6 +95,8 @@ WGStoCHE <- function(lat, lon=NULL)
   44.54 * (lon_aux^3);
 }
 
+#' @rdname WGSCH
+#' @export
 WGStoCHN <- function(lat, lon=NULL)
 {
   if(length(dim(lat))==2) {
@@ -71,6 +119,8 @@ WGStoCHN <- function(lat, lon=NULL)
   119.79 * (lat_aux^3);
 }
 
+#' @rdname WGSCH
+#' @export
 CHtoWGSlat <- function (N, E=NULL)
 {
   if(length(dim(N))==2) {
@@ -93,6 +143,8 @@ CHtoWGSlat <- function (N, E=NULL)
           0.0140   * (x_aux^3)};
 }
 
+#' @rdname WGSCH
+#' @export
 CHtoWGSlon <- function (N, E=NULL)
 {
   if(length(dim(N))==2) {

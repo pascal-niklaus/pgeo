@@ -1,4 +1,4 @@
-library(pascal.geo)
+library(pgeo)
 
 ## approximate conversions obtained from
 ## http://www.swisstopo.admin.ch/internet/swisstopo/en/home/apps/calc/navref.html
