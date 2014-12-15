@@ -6,14 +6,14 @@
 delta.to.atpct(delta, R = NULL, isotope = "N15", fraction = FALSE)
 }
 \arguments{
-\item{delta}{A vector of delta-values, in permilles (i.e. 0.001 = 1 permil)}
+\item{delta}{A vector of delta-values, in permilles}
 
 \item{R}{The R value of the reference material on which the delta values are based (defaults to NULL)}
 
 \item{isotope}{Instead of passing the R value as argument, one can also indicated the
-isotope character string. This works for C-13 (PD-belemnite), N-15 (Air), O-18 (VSMOW) and H-2 (VSMOW).
+isotope using a character string. This works for C-13 (PD-belemnite), N-15 (Air), O-18 (VSMOW) and H-2 (VSMOW).
 The specific formatting does not matter, e.g. `C13', `C-13', `13C' or `13-C' will all work.
-`D' works as equivalent to `H-2'.}
+`D' is equivalent to `H-2'.}
 
 \item{fraction}{logical (defaults to FALSE).
 If TRUE, then the isotopic content is returned as a fraction, i.e. 1.0 for 100\%.
@@ -24,7 +24,7 @@ atom percentages (or fractions)
 }
 \description{
 Often, one needs to convert delta-permil data from isotope-ratio
-mass spectrometry into atom-percent, i.e. the percentage (or fraction)
+mass spectrometry to atom-percent, i.e. the percentage (or fraction)
 an isotopes makes up of a given element. This is crucial for mass balance
 calculations, since delta-values are not proportional to the extent of
 labelling.

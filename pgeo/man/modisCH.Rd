@@ -4,16 +4,16 @@
 \alias{modisIJtoCH}
 \title{Convert MODIS (line,sample) to Swiss Grid coordinates and vice versa}
 \usage{
-modisIJtoCH(I, J = NULL, grid = 250)
+modisIJtoCH(I, J = NULL, pixel = 250)
 
-CHtomodisIJ(N, E = NULL, grid = 250)
+CHtomodisIJ(N, E = NULL, pixel = 250)
 }
 \arguments{
-\item{I}{MODIS tile line (O..4799), or a data frame containing tile line and sample in separate columns.}
+\item{I}{MODIS tile line (O..4799), or a data frame containing tile line and sample in separate columns. \code{I} can be fractional.}
 
-\item{J}{MODIS tile sample (0..4799), or NULL if the sample has been passed together with the line as a data frame.}
+\item{J}{MODIS tile sample (0..4799), or NULL if the sample has been passed together with the line as a data frame. \code{J} can be fractional.}
 
-\item{grid}{Modis grid type, defaults to 250. Can also be 500 or 1000.}
+\item{pixel}{Modis pixel size in meters. Defaults to 250. Can also be 500 or 1000.}
 
 \item{N}{Northing, in kilometers (Swiss Grid), or a data frame containing northing and easting as separate columns.}
 

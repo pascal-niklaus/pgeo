@@ -1,0 +1,13 @@
+# This file was created using 
+# http://www.swisstopo.admin.ch/internet/swisstopo/en/home/apps/calc/navref.html
+# http://landweb.nascom.nasa.gov/cgi-bin/developer/tilemap.cgi
+# to first convert Swiss grid LV03 coordinates (N,E) to WGS-84 (lat,long),
+# and then WGS-84 to the respective modis sinusoidal grids.
+# the intended purpouse is to provide a set of test data for unit testing
+     E,      N,          lat,         lon,   I1000,   J1000,    I500,    J500,    I250,    J250
+537500, 181300, 46.779935020, 6.620218846,  385.91,  543.52,  772.32, 1087.55, 1545.13,  2175.60
+589456, 108123, 46.124519273, 7.302231412,  464.56,  606.84,  929.62, 1214.17, 1859.73,  2428.84
+717000, 122000, 46.239256151, 8.955560800,  450.79,  742.79,  902.08, 1486.08, 1804.66,  2972.67
+809700, 186000, 46.792124734,10.185723609,  384.45,  836.34,  769.39, 1673.17, 1539.28,  3346.84
+689900, 281000, 47.673460172, 8.635726195,  278.68,  697.29,  557.87, 1395.08, 1116.24,  2790.66
+682500, 247400, 47.372272502, 8.530971564,  314.83,  692.79,  630.15, 1386.09, 1260.81,  2772.67

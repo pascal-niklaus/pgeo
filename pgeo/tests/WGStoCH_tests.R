@@ -1,50 +1,74 @@
 library(pgeo)
 
-## approximate conversions obtained from
+## http://landweb.nascom.nasa.gov/cgi-bin/developer/tilemap.cgi
 ## http://www.swisstopo.admin.ch/internet/swisstopo/en/home/apps/calc/navref.html
-## using altitude = 400m (does not matter much)
+
+filename <- system.file("extdata","validation.csv",package="pgeo")
+
+d <- read.csv(filename,comment.char="#")
 
 approxEq <- function(x1,x2,prec=1e-5) {
   all(abs(x1-x2)/rowMeans(cbind(abs(x1),abs(x2)))<prec);
 }
 
-lat <- 47;
-lon <- 7;
+########################### Testing WGStoCH conversion ########################
 
-N <- 205531.520
-E <- 566639.444
+cat("### Testing WGStoCH ...\n");
 
-d<- WGStoCH(lat=lat,lon=lon)
-stopifnot(approxEq(c(N,E),c(d$N,d$E)))
+deviation <- numeric(nrow(d))
+for(i in seq_along(rownames(d))) {
+  # testing base function and recording deviation
+  tmp<- WGStoCH(lat=d$lat[i],lon=d$lon[i])
+  stopifnot(approxEq(c(d$N[i],d$E[i]),c(tmp$N,tmp$E)))
+  deviation[i]<-sqrt((d$N[i]-tmp$N)^2+(d$E[i]-tmp$E)^2)
+  
+  # testing alternative parameter passing styles
+  tmp<- WGStoCH(data.frame(P1=d$lat[i],P2=d$lon[i]))
+  stopifnot(approxEq(c(d$N[i],d$E[i]),c(tmp$N,tmp$E)))
 
-d<- CHtoWGS(N=N,E=E)
-stopifnot(approxEq(c(lat,lon),c(d$lat,d$lon)))
+  tmp<- WGStoCH(data.frame(lon=d$lon[i],lat=d$lat[i]))
+  stopifnot(approxEq(c(d$N[i],d$E[i]),c(tmp$N,tmp$E)))
 
-N0 <- WGStoCHN(lat=lat,lon=lon)
-N1 <- WGStoCHN(data.frame(lat=lat,lon=lon))
-N2 <- WGStoCHN(data.frame(lon=lon,lat=lat))
-N3 <- WGStoCHN(data.frame(A=lat,B=lon))
+  # testing separate function for E and N component  
+  tmp<- WGStoCHE(data.frame(lat=d$lat[i],lon=d$lon[i]))
+  stopifnot(approxEq(d$E[i],tmp))
 
-stopifnot(approxEq(c(N0,N1,N2,N3),N));
+  tmp<- WGStoCHN(data.frame(lon=d$lon[i],lat=d$lat[i]))
+  stopifnot(approxEq(d$N[i],tmp))
+}
 
-E0 <- WGStoCHE(lat=lat,lon=lon)
-E1 <- WGStoCHE(data.frame(lat=lat,lon=lon))
-E2 <- WGStoCHE(data.frame(lon=lon,lat=lat))
-E3 <- WGStoCHE(data.frame(A=lat,B=lon))
+cat("    Deviation in obtained CH1903 coordinates (in meters):\n",
+    "    - mean =",mean(deviation),"\n",
+    "    - max =",max(deviation),"\n")
 
-stopifnot(approxEq(c(E0,E1,E2,E3),E));
+cat("### Testing CHtoWGS ...\n");
 
-llat0 <- CHtoWGSlat(N=N,E=E)
-llat1 <- CHtoWGSlat(data.frame(N=N,E=E))
-llat2 <- CHtoWGSlat(data.frame(E=E,N=N))
-llat3 <- CHtoWGSlat(data.frame(A=N,B=E))
+deviation <- numeric(nrow(d))
+for(i in seq_along(rownames(d))) {
+  # testing base function and recording deviation
+  tmp<- CHtoWGS(E=d$E[i],N=d$N[i])
+  stopifnot(approxEq(c(d$lat[i],d$lon[i]),c(tmp$lat,tmp$lon)))
+  # approx angle in degrees
+  deviation[i]<-sqrt((d$lat[i]-tmp$lat)^2+(d$lon[i]-tmp$lon)^2)  
+  
+  # testing alternative parameter passing styles
+  tmp<- CHtoWGS(data.frame(E=d$E[i],N=d$N[i]))
+  stopifnot(approxEq(c(d$lat[i],d$lon[i]),c(tmp$lat,tmp$lon)))
 
-stopifnot(approxEq(c(llat0,llat1,llat2,llat3),lat));
+  tmp<- CHtoWGS(data.frame(P1=d$N[i],P2=d$E[i]))
+  stopifnot(approxEq(c(d$lat[i],d$lon[i]),c(tmp$lat,tmp$lon)))
 
-llon0 <- CHtoWGSlon(N=N,E=E)
-llon1 <- CHtoWGSlon(data.frame(N=N,E=E))
-llon2 <- CHtoWGSlon(data.frame(E=E,N=N))
-llon3 <- CHtoWGSlon(data.frame(A=N,B=E))
+  # testing separate function for E and N component  
+  tmp<- CHtoWGSlat(data.frame(N=d$N[i],E=d$E[i]))
+  stopifnot(approxEq(d$lat[i],tmp))
 
-stopifnot(approxEq(c(llon0,llon1,llon2,llon3),lon));
+  tmp<- CHtoWGSlon(data.frame(N=d$N[i],E=d$E[i]))
+  stopifnot(approxEq(d$lon[i],tmp))
+}
 
+cat("    Deviation in obtained (lat,lon) coordinates (in degrees):\n",
+    "    - mean =",mean(deviation),"\n",
+    "    - max =",max(deviation),"\n")
+
+    
+  

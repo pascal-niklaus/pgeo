@@ -37,14 +37,14 @@ Returns WGS-84 latitude or longitude, or Swiss Grid norting or easting.
        If both coordinates are returned, they are stored in a data frame with the respective column names.
 }
 \description{
-These functions convert coordinates between WGS-84 (latitude/longitude) and the Swiss Grid (X:northing/Y:easting).
+These functions convert coordinates between WGS-84 (latitude/longitude) and the Swiss Grid (N:northing/E:easting).
 The conversion is approximate with an accuracy of a few meters, based on equations provided by SwissTopo.
 These functions return the converted coordinates.
 }
 \details{
 All variants of CHtoWGS and WGStoCH optionally take a data frame with two columns as first argument,
 and will return the respective result in a data frame with two columns. The content of the data frame
-is interpreted according to the column names (\code{N} and \code{E} or \code{lat} and \code{long}) or,
+is interpreted according to the column names (\code{N} and \code{E} or \code{lat} and \code{lon}) or,
 if other names are used, according to the default argument order.
 }
 \examples{

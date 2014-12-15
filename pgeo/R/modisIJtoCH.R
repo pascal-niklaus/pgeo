@@ -19,12 +19,12 @@
 #' If the columns are not named \code{I} and \code{J}, the first is assumed to contain I and 
 #' the second to contain J.
 #'
-#' @param I MODIS tile line (O..4799), or a data frame containing tile line and sample in separate columns.
-#' @param J MODIS tile sample (0..4799), or NULL if the sample has been passed together with the line as a data frame.
+#' @param I MODIS tile line (O..4799), or a data frame containing tile line and sample in separate columns. \code{I} can be fractional.
+#' @param J MODIS tile sample (0..4799), or NULL if the sample has been passed together with the line as a data frame. \code{J} can be fractional.
 #' @param N Northing, in kilometers (Swiss Grid), or a data frame containing northing and easting as separate columns.
 #' @param E Easting, in kilometers (Swiss Grid), or NULL if the easting has been passed together with the 
 #'          northing as a data frame.
-#' @param grid Modis grid type, defaults to 250. Can also be 500 or 1000.
+#' @param pixel Modis pixel size in meters. Defaults to 250. Can also be 500 or 1000.
 #' @return  Returns a data frame with Swiss Grid northing and easting in columns designated N and E,
 #'          or a data frame with MODIS line and sample in columns designated I and J.   
 #' @examples
@@ -52,7 +52,7 @@
 #' # [sn q fwd tp] lat 46.951000  long 7.439140  =>  vert tile 4  horiz tile 18  line 1463.02  samp 2437.00
 #' @rdname modisCH
 #' @export
-modisIJtoCH <- function(I,J=NULL,grid=250) {
+modisIJtoCH <- function(I,J=NULL,pixel=250) {
   if(length(dim(I))==2 && is.null(J)) {
     if(all(c("I","J") %in% names(I))) {
       J<-I$J;
@@ -63,7 +63,7 @@ modisIJtoCH <- function(I,J=NULL,grid=250) {
     }
   }
 
-  if(grid==250) {  
+  if(pixel==250) {  
     I<-I-1463;
     J<-J-2437;
 
@@ -86,7 +86,7 @@ modisIJtoCH <- function(I,J=NULL,grid=250) {
           -2.946377439e-05*I*J
           +1.511884919e-07*I^2*J
           +2.217079808e-08*I*J^2));
-  } else if(grid==500) {
+  } else if(pixel==500) {
     I<-I-730;
     J<-J-1200;
     data.frame(
@@ -108,6 +108,28 @@ modisIJtoCH <- function(I,J=NULL,grid=250) {
             +I*J * -0.000127349259576026
             +I^2*J * 1.20951872572593e-06
             +I*J^2 * 1.77355098239527e-07 ));
+  }  else if(pixel==1000) {
+    I<-I-365;
+    J<-J-612;
+    data.frame(
+      N = ( 200000 + 343.371760296795
+          +I * -926.46691861346
+          +J * 0.449589578103396
+          +I^2 * 0.00138530579794754
+          +J^2 * 0.0723627265736565
+          +I^3 * -3.48180036069301e-06
+          +I * J * -0.0138125164096409
+          +I^2 * J * 3.48769113762746e-06
+          +I * J^2 * -1.12236771456949e-05 ),
+      E = ( 600000 + 2975.56309010675
+          +I * -88.1965572340521
+          +J * 929.333253502733
+          +I^2 * 0.00605205556356213
+          +J^2 * -4.08994747380051e-05
+          +J^3 * -3.77469913194586e-06
+          +I * J * -0.000469801402281904
+          +I^2 * J * 9.67527092679532e-06
+          +I * J^2 * 1.41877564034081e-06 )); 
   } else {
     stop("Unknown MODIS grid: ",grid);
   }
@@ -115,9 +137,9 @@ modisIJtoCH <- function(I,J=NULL,grid=250) {
   
 #' @rdname modisCH
 #' @export
-CHtomodisIJ <- function(N,E=NULL,grid=250) {
+CHtomodisIJ <- function(N,E=NULL,pixel=250) {
   RSS <- function(x) {      
-    sum((modisIJtoCH(x[1],x[2],grid=grid)-c(N0,E0))^2);
+    sum((modisIJtoCH(x[1],x[2],pixel=pixel)-c(N0,E0))^2);
   }
   
   if(length(dim(N))==2 && is.null(E)) {
@@ -138,7 +160,7 @@ CHtomodisIJ <- function(N,E=NULL,grid=250) {
   r <- data.frame(t(apply(cbind(N,E),1,function(x) { 
                        assign("N0",x[1],inherits=TRUE);
                        assign("E0",x[2],inherits=TRUE); 
-                       optim(c(1463,2437),RSS,method="BFGS")$par; 
+                       optim(c(1463/(pixel/250),2437/(pixel/250)),RSS,method="BFGS")$par; 
                      }
         ))) 
   names(r) <- c("I","J");

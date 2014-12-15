@@ -1,21 +1,17 @@
-# Karlen, I., Olsson, I.U., Kallburg, P. and Kilici, S., 1964. 
-# Absolute determination of the activity of two 14C dating standards. 
-# Arkiv Geofysik, 4:465-471.
-
 #' Convert isotope delta notation to atom percent
 #'
 #' Often, one needs to convert delta-permil data from isotope-ratio
-#' mass spectrometry into atom-percent, i.e. the percentage (or fraction)
+#' mass spectrometry to atom-percent, i.e. the percentage (or fraction)
 #' an isotopes makes up of a given element. This is crucial for mass balance
 #' calculations, since delta-values are not proportional to the extent of
 #' labelling.  
 #'
-#' @param delta A vector of delta-values, in permilles (i.e. 0.001 = 1 permil)
+#' @param delta A vector of delta-values, in permilles 
 #' @param R The R value of the reference material on which the delta values are based (defaults to NULL)
 #' @param isotope Instead of passing the R value as argument, one can also indicated the
-#'     isotope character string. This works for C-13 (PD-belemnite), N-15 (Air), O-18 (VSMOW) and H-2 (VSMOW). 
+#'     isotope using a character string. This works for C-13 (PD-belemnite), N-15 (Air), O-18 (VSMOW) and H-2 (VSMOW). 
 #'     The specific formatting does not matter, e.g. `C13', `C-13', `13C' or `13-C' will all work.
-#'     `D' works as equivalent to `H-2'.
+#'     `D' is equivalent to `H-2'.
 #' @param fraction logical (defaults to FALSE). 
 #'         If TRUE, then the isotopic content is returned as a fraction, i.e. 1.0 for 100\%.
 #'         If FALSE, a value of 100 indicates 100\%. 
