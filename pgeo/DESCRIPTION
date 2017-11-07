@@ -1,13 +1,14 @@
 Package: pgeo
 Type: Package
-Title: Collection of 'geo'-related functions.
-Description: This library contains functions to interconvert MODIS line/sample
-    coordinates, Swiss Grid Norting and Easting, and WGS-84 lat/lon. A further
-    function converts delta permille to atom-percent for various isotopes.
-Version: 1.0.1
-Date: 2014-12-15
-Depends:
-    R (>= 3.0.0)
+Title: Collection of 'geo'-related functions
+Description: This library contains functions to interconvert MODIS
+        line/sample coordinates, Swiss Grid Norting and Easting, and
+        WGS-84 lat/lon. A further function converts delta permille to
+        atom-percent for various isotopes.
+Version: 1.1
+Date: 2017-11-07
+Depends: R (>= 3.0.0)
 Author: Pascal A. Niklaus
 Maintainer: Pascal A. Niklaus <pascal.niklaus@ieu.uzh.ch>
 License: GPL (>=2)
+RoxygenNote: 6.0.1

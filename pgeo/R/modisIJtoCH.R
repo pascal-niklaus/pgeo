@@ -51,6 +51,8 @@
 #' # Forward mapping (geographic coordinates in degrees): latitude, longitude
 #' # [sn q fwd tp] lat 46.951000  long 7.439140  =>  vert tile 4  horiz tile 18  line 1463.02  samp 2437.00
 #' @rdname modisCH
+#' @importFrom graphics grid
+#' @importFrom stats optim
 #' @export
 modisIJtoCH <- function(I,J=NULL,pixel=250) {
   if(length(dim(I))==2 && is.null(J)) {
