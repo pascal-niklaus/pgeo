@@ -4,6 +4,11 @@
 #' 1000m pixel size) to latitude/longitude coordinates, assuming a
 #' sinusoidal projection.  These calculations are equivalent to the
 #' ones offered on-line by the MODLAND tile calculator (see link below).
+#'
+#' The (latitude,longitude) coordinates refer to the center of the
+#' pixel. Note that there are numeric issues at the very location of
+#' the poles, but these do not matter because no MODIS data is
+#' available for these areas anyway.
 #' 
 #' @param lat,lon latitude and longitude as separate vectors, or as
 #'     data.frame with corresponding column names. The data.frame is
@@ -52,8 +57,8 @@ toMODISxy <- function(lat,lon=NULL, grid=250)
         lat <- lat$lat
     }
     tilesize <- 4800*250/grid
-    gy <- (90 - lat)/180 * 18 * tilesize - .5
-    gx <- lon/360*36*tilesize * cos(lat * pi / 180) + 18*tilesize - .5
+    gy <- ((90 - lat)/180 * 18 * tilesize - .5) 
+    gx <- (lon/360*36*tilesize * cos(lat * pi / 180) + 18*tilesize - .5) %% (36*tilesize)    
     data.frame(gx = gx,
                gy = gy,
                tileh = floor(gx/tilesize),
@@ -72,10 +77,10 @@ fromMODISxy <- function(gx, gy=NULL, grid=250)
     }    
     tilesize <- 4800*250/grid    
     lat <- 90 - ( gy + 0.5 ) * 180 / ( 18 * tilesize )
-    if(abs(abs(lat)-90)<1e-5) # special case at pole: longitude undefined, chose 0
-        lon <- 0
-    else        
-        lon <- ( gx + 0.5 - 18 * tilesize ) * 360 / (36 * tilesize * cos( lat * pi / 180 ) )    
+    lon <- ifelse(
+        abs(abs(lat)-90) < 1e-5, # at pole: longitude undefined, set to 0
+        0, 
+        ( gx + 0.5 - 18 * tilesize ) * 360 / (36 * tilesize * cos( lat * pi / 180 ) ))
     data.frame(lat = lat, lon = lon)
 }
 

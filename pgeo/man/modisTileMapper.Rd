@@ -34,6 +34,12 @@ These functions convert MODIS line/sample coordinates (250, 500 or
 sinusoidal projection.  These calculations are equivalent to the
 ones offered on-line by the MODLAND tile calculator (see link below).
 }
+\details{
+The (latitude,longitude) coordinates refer to the center of the
+pixel. Note that there are numeric issues at the very location of
+the poles, but these do not matter because no MODIS data is
+available for these areas anyway.
+}
 \examples{
 require(pgeo)
 ## let's take a test location near Bern, Switzerland
