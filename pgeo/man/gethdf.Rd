@@ -10,8 +10,8 @@ get_hdf_list(tiles = c("h18v04"), sat = c("aqua", "terra"),
   product = "13Q1", server = "http://e4ftl01.cr.usgs.gov",
   verbose = TRUE)
 
-get_hdf_file(url = NULL, file = NULL, username = "user",
-  password = "passw", overwrite = FALSE)
+get_hdf_file(url = NULL, file = NULL, outdir = NULL,
+  username = "user", password = "passw", overwrite = FALSE)
 }
 \arguments{
 \item{tiles}{the MODIS tiles to download in format \code{h??v??}
@@ -38,6 +38,9 @@ to the console (defaults to \code{TRUE}).}
 
 \item{file}{if specifies, \code{file} allows to change the file
 name under which the MODIS hdf file is saved.}
+
+\item{outdir}{directory where the hdf file is to be stored. This
+can be a relative or absolute path.}
 
 \item{username, password}{username and password for hdf file
 retrieval.}

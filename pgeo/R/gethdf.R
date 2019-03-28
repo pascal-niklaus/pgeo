@@ -40,6 +40,9 @@
 #'
 #' @param url full url of MODIS file to be downloaded.
 #'
+#' @param outdir directory where the hdf file is to be stored. This
+#'     can be a relative or absolute path.
+#'
 #' @param file if specifies, \code{file} allows to change the file
 #'     name under which the MODIS hdf file is saved.
 #'
@@ -134,6 +137,7 @@ get_hdf_list <- function(tiles = c("h18v04"),
 #' @export
 get_hdf_file <- function(url=NULL,
                          file=NULL,
+                         outdir=NULL,
                          username="user",
                          password="passw",
                          overwrite=FALSE)
@@ -146,10 +150,11 @@ get_hdf_file <- function(url=NULL,
                    password))
     system("touch .urs_cookies && chmod 0600 .urs_cookies")
     for(i in seq_along(url)) {
-        if(overwrite || !file.exists(file)) {
-            cat("Retrieving",file,"...\n")
+        fullname <- if(is.null(outdir)) file[i] else paste(outdir, file[i], sep="/")
+        if(overwrite || !file.exists(fullname)) {
+            cat("Retrieving", file[i], "...\n")
             system(sprintf("curl -o '%s' -O -b .urs_cookies -c .urs_cookies --location --netrc-file .netrc '%s'",
-                           file[i],
+                           fullname,
                            url[i]))
         } else
             cat("File",file,"already exists, skipping...\n")

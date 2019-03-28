@@ -3,8 +3,10 @@ Type: Package
 Title: Collection of 'geo'-related functions
 Description: This library contains functions to interconvert MODIS
         line/sample coordinates, Swiss Grid Norting and Easting, and
-        WGS-84 lat/lon. A further function converts delta permille to
-        atom-percent for various isotopes.
+        WGS-84 lat/lon. Some function also allow to easy download
+        MODIS hdf files from the USGS repository.
+        A further function converts delta permille to atom-percent
+        for various isotopes.
 Version: 1.1
 Date: 2017-11-07
 Depends: R (>= 3.0.0)
