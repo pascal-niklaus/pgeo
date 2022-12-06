@@ -40,7 +40,7 @@ and fitting a corresponding linear model (up to third order polynomial terms of 
 accuracy of a few meters was reached.  
 Note that the conversion from MODIS line/sample coordinates to Swiss Grid is fast, whereas 
 conversion in the opposite direction is very slow since it bases on an optimization procedure, 
-internally calling R's \code{optim} function.
+internally calling R's \code{optim} function.  
 
 line/sample can be passed as separate arguments, or as a single argument combined into a data frame. 
 If the columns are not named \code{I} and \code{J}, the first is assumed to contain I and 
