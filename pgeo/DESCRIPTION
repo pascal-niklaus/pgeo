@@ -9,7 +9,7 @@ Description: This library contains functions to interconvert MODIS
 Version: 1.3
 Date: 2020-01-26
 Depends: R (>= 3.3.0)
-Imports: digest, pascal
+Imports: digest
 Author: Pascal A. Niklaus
 Maintainer: Pascal A. Niklaus <pascal.niklaus@ieu.uzh.ch>
 License: GPL (>=2)

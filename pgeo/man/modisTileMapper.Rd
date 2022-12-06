@@ -55,7 +55,7 @@ fromMODISxy(r)
 ## 1 46.95104 7.439135
 
 ## Compare this to the tile mapper output for the forward mapping of this coordinate:
-## http://landweb.nascom.nasa.gov/cgi-bin/developer/tilemap.cgi
+## https://landweb.modaps.eosdis.nasa.gov/cgi-bin/developer/tilemap.cgi
 ## Map Projection/Grid: Sinusoidal
 ## Pixel size: 0.25km
 ## Mapping type: Tile/image coordinates 

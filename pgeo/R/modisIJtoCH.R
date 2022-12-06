@@ -1,23 +1,28 @@
 #' Convert MODIS (line,sample) to Swiss Grid coordinates and vice versa
 #'
-#' These functions converts MODIS line/sample coordinates (250, 500 or 1000m pixel size) from 
-#' tile H18V04 to Swiss Grid coordinates in meters and vice versa.
-#' The accuracy of the conversion is within a few meters. 
+#' These functions converts MODIS line/sample coordinates (250, 500 or
+#' 1000m pixel size) from tile H18V04 to Swiss Grid coordinates in
+#' meters and vice versa.  The accuracy of the conversion is within a
+#' few meters.
 #'
-#' These functions were developed by first converting modis line/sample coordinates to WGS-84 
-#' latitude and longitude using the MODIS tile mapper
-#' (\url{http://landweb.nascom.nasa.gov/cgi-bin/developer/tilemap.cgi}), then converting these to 
-#' Swiss Grid norting and easting using the approximate equations provided by SwissTopo 
-#' (\url{http://www.swisstopo.admin.ch/internet/swisstopo/en/home/products/software/products/skripts.html}), 
-#' and fitting a corresponding linear model (up to third order polynomial terms of I,J) until an 
-#' accuracy of a few meters was reached.  
-#' Note that the conversion from MODIS line/sample coordinates to Swiss Grid is fast, whereas 
-#' conversion in the opposite direction is very slow since it bases on an optimization procedure, 
-#' internally calling R's \code{optim} function.  
+#' These functions were developed by first converting modis
+#' line/sample coordinates to WGS-84 latitude and longitude using the
+#' MODIS tile mapper
+#' (\url{https://landweb.modaps.eosdis.nasa.gov/cgi-bin/developer/tilemap.cgi}),
+#' then converting these to Swiss Grid norting and easting using the
+#' approximate equations provided by SwissTopo
+#' (\url{https://github.com/ValentinMinder/Swisstopo-WGS84-LV03}), and
+#' fitting a corresponding linear model (up to third order polynomial
+#' terms of I,J) until an accuracy of a few meters was reached.  Note
+#' that the conversion from MODIS line/sample coordinates to Swiss
+#' Grid is fast, whereas conversion in the opposite direction is very
+#' slow since it bases on an optimization procedure, internally
+#' calling R's \code{optim} function.
 #' 
-#' line/sample can be passed as separate arguments, or as a single argument combined into a data frame. 
-#' If the columns are not named \code{I} and \code{J}, the first is assumed to contain I and 
-#' the second to contain J.
+#' line/sample can be passed as separate arguments, or as a single
+#' argument combined into a data frame.  If the columns are not named
+#' \code{I} and \code{J}, the first is assumed to contain I and the
+#' second to contain J.
 #'
 #' @param I MODIS tile line (O..4799), or a data frame containing tile line and sample in separate columns. \code{I} can be fractional.
 #' @param J MODIS tile sample (0..4799), or NULL if the sample has been passed together with the line as a data frame. \code{J} can be fractional.

@@ -70,7 +70,6 @@
 #' @rdname gethdf
 #' @importFrom utils head
 #' @importFrom utils tail
-#' @importFrom pascal safen
 #'
 #' @export
 get_hdf_dirs <-
@@ -97,7 +96,7 @@ get_hdf_dirs <-
     srvr <- gsub("(?<!/)/[^/].+","",server,perl=TRUE)
     years <- c(if(is.na(head(years, 1))) "0000" else head(years,1),
                if(is.na(tail(years, 1))) "9999" else tail(years,1))
-    years <- sprintf("%04d", safen(years))
+    years <- sprintf("%04d", as.numeric(as.character(years)))
 
     ## get top directories for each year
     topdirs <-
@@ -172,7 +171,7 @@ get_hdf_list <-
 {
     years <- c(if(is.na(head(years, 1))) "0000" else head(years,1),
                if(is.na(tail(years, 1))) "9999" else tail(years,1))
-    years <- sprintf("%04d", safen(years))
+    years <- sprintf("%04d", as.numeric(as.character(years)))
 
     srvr <- gsub("(?<!/)/[^/].+","",server,perl=TRUE)
 
